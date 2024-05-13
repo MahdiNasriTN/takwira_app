@@ -8,7 +8,8 @@ import 'package:takwira_app/views/fieldProfile/field_posts.dart';
 import 'package:takwira_app/views/fieldProfile/field_profile_header.dart';
 
 class FieldProfile extends ConsumerStatefulWidget {
-  const FieldProfile({super.key});
+  final dynamic? field;
+  const FieldProfile({super.key, required this.field});
 
   @override
   _FieldProfileState createState() => _FieldProfileState();
@@ -38,6 +39,7 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
 
   @override
   Widget build(BuildContext context) {
+    final field = widget.field?['field'];
     final fieldData = ref.watch(fieldDataProvider);
     final loved = ref.watch(loveProvider);
 
@@ -111,7 +113,7 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
             return [
               SliverList(
                 delegate: SliverChildListDelegate([
-                  FieldProfileHeader(
+                  FieldProfileHeader(field : field,
                     onBookNowPressed: () {
                       setState(() {
                         selectedIndex = 2;
@@ -179,7 +181,7 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
               ),
               Expanded(
                   child: TabBarView(controller: _tabController, children: [
-                FieldDetails(),
+                FieldDetails(field : field),
                 FieldPosts(),
                 FieldBooking(),
               ]))

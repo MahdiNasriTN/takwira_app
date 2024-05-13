@@ -1,14 +1,49 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:takwira_app/views/cards/field_card.dart';
 import 'package:takwira_app/views/create/create_game.dart';
 import 'package:takwira_app/views/create/create_team.dart';
 import 'package:takwira_app/views/fieldProfile/field_profile.dart';
 import 'package:takwira_app/views/profile/profile.dart';
+import 'package:http/http.dart' as http;
 
-class Fields extends StatelessWidget {
+class Fields extends StatefulWidget {
   const Fields({super.key});
 
+  @override
+    State<Fields> createState() => _FieldsState();
+}
+
+class _FieldsState extends State<Fields>{
+  List<dynamic>? fields;
+  @override
+  void initState() {
+    super.initState();
+    fetchFieldsData();
+  }
+
+  Future<void> fetchFieldsData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var username = prefs.getString('username') ?? '';
+    if (username.isNotEmpty) {
+      try {
+        final response = await http.get(Uri.parse('https://takwira.me/api/fields?username=$username'));
+        if (response.statusCode == 200) {
+          final fieldsResponse = jsonDecode(response.body);
+          setState(() {
+            fields = fieldsResponse['fields'];
+          });
+        } else {
+          print('Failed to fetch user data: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Failed to fetch user data: $e');
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double a = 0;
@@ -189,8 +224,9 @@ class Fields extends StatelessWidget {
               SizedBox(height: width(15)),
               Column(
                 children: List.generate(
-                  10,
+                  fields!.length,
                   (index) {
+                    final field = fields![index];
                     return Column(
                       children: [
                         InkWell(
@@ -198,14 +234,14 @@ class Fields extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const FieldProfile(),
+                                builder: (context) => FieldProfile(field : field),
                               ),
                             );
                           },
                           child: Ink(
                               child: Stack(
                             children: [
-                              FieldCard(field : null),
+                              FieldCard(field : field),
                             ],
                           )),
                         ),

@@ -4,7 +4,8 @@ import 'package:takwira_app/views/create/create_game.dart';
 import 'package:takwira_app/views/games/game_details.dart';
 
 class Upcoming extends StatelessWidget {
-  const Upcoming({super.key});
+  final dynamic? upcomingGames;
+  const Upcoming({super.key, required this.upcomingGames});
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +61,9 @@ class Upcoming extends StatelessWidget {
               SizedBox(height: width(15)),
               Column(
                 children: List.generate(
-                  10,
+                  upcomingGames.length,
                   (index) {
+                    final game = upcomingGames[index];
                     return Column(
                       children: [
                         InkWell(
@@ -69,11 +71,11 @@ class Upcoming extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const GameDetails(gameDataS : null),
+                                builder: (context) => GameDetails(gameDataS : game),
                               ),
                             );
                           },
-                          child: Ink(child: GameCard(game: true, gameDataS : null)),
+                          child: Ink(child: GameCard(game: true, gameDataS : game)),
                         ),
                         SizedBox(height: width(15)),
                       ],

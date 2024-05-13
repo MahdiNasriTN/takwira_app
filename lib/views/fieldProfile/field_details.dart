@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:takwira_app/data/field_data.dart';
 
 class FieldDetails extends ConsumerWidget {
-  const FieldDetails({super.key});
+  final dynamic? field;
+  const FieldDetails({super.key, required this.field});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,48 +45,48 @@ class FieldDetails extends ConsumerWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: width(12)),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/phone.png',
-                      width: width(16),
-                      height: width(16),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        fieldData.phone,
-                        style: TextStyle(
-                          color: const Color(0xFF5C7E6C),
-                          fontSize: width(12),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: width(12)),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/mail.png',
-                      width: width(16),
-                      height: width(16),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        fieldData.mail,
-                        style: TextStyle(
-                          color: const Color(0xFF5C7E6C),
-                          fontSize: width(12),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // SizedBox(height: width(12)),
+                // Row(
+                //   children: [
+                //     Image.asset(
+                //       'assets/images/phone.png',
+                //       width: width(16),
+                //       height: width(16),
+                //     ),
+                //     TextButton(
+                //       onPressed: () {},
+                //       child: Text(
+                //         fieldData.phone,
+                //         style: TextStyle(
+                //           color: const Color(0xFF5C7E6C),
+                //           fontSize: width(12),
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: width(12)),
+                // Row(
+                //   children: [
+                //     Image.asset(
+                //       'assets/images/mail.png',
+                //       width: width(16),
+                //       height: width(16),
+                //     ),
+                //     TextButton(
+                //       onPressed: () {},
+                //       child: Text(
+                //         fieldData.mail,
+                //         style: TextStyle(
+                //           color: const Color(0xFF5C7E6C),
+                //           fontSize: width(12),
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: width(32)),
                 Row(
                   children: [
@@ -132,7 +133,7 @@ class FieldDetails extends ConsumerWidget {
                     ),
                     SizedBox(width: width(5)),
                     Text(
-                      '${fieldData.nbFields} fields',
+                      '${field['nbFields']} fields',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -151,7 +152,7 @@ class FieldDetails extends ConsumerWidget {
                     ),
                     SizedBox(width: width(5)),
                     Text(
-                      '${fieldData.price} DNT',
+                      '${field['price']} DNT',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -169,6 +170,7 @@ class FieldDetails extends ConsumerWidget {
               children: [
                 SizedBox(height: width(35)),
                 Text(
+                  /* LAHNA YY CHAMS A3MEL EL BOUCLE AAL SERVICES*/ 
                   'Our Services',
                   style: TextStyle(
                     color: const Color(0xFFF1EED0),
@@ -270,7 +272,7 @@ class FieldDetails extends ConsumerWidget {
               children: [
                 SizedBox(height: width(43)),
                 Text(
-                  'about ${fieldData.fieldName}',
+                  'about ${field['name']}',
                   style: TextStyle(
                     color: const Color(0xFFBFBCA0),
                     fontSize: width(12),
@@ -281,7 +283,7 @@ class FieldDetails extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width(18)),
                   child: Text(
-                    fieldData.fieldDesc,
+                    field['description'],
                     style: TextStyle(
                       color: const Color(0xFFF1EED0),
                       fontSize: width(10),

@@ -63,7 +63,6 @@ class _PlayersState extends State<Players>{
 
   @override
   Widget build(BuildContext context) {
-    print(playersData?[0]['username']);
     double a = 0;
     double screenWidth = MediaQuery.of(context).size.width;
     double width(double width) {

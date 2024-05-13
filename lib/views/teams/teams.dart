@@ -1,10 +1,45 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:takwira_app/views/cards/team_card.dart';
 import 'package:takwira_app/views/create/create_team.dart';
 import 'package:takwira_app/views/teams/team_details.dart';
+import 'package:http/http.dart' as http;
 
-class Teams extends StatelessWidget {
+class Teams extends StatefulWidget {
   const Teams({super.key});
+  @override
+    State<Teams> createState() => _TeamsState();
+}
+
+class _TeamsState extends State<Teams>{
+  List<dynamic>? teams;
+  @override
+  void initState() {
+    super.initState();
+    fetchTeamsData();
+  }
+
+  Future<void> fetchTeamsData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var username = prefs.getString('username') ?? '';
+    if (username.isNotEmpty) {
+      try {
+        final response = await http.get(Uri.parse('https://takwira.me/api/teams?username=$username'));
+        if (response.statusCode == 200) {
+          final fieldsResponse = jsonDecode(response.body);
+          setState(() {
+            teams = fieldsResponse['teams'];
+          });
+        } else {
+          print('Failed to fetch user data: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Failed to fetch user data: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +106,9 @@ class Teams extends StatelessWidget {
               SizedBox(height: width(15)),
               Column(
                 children: List.generate(
-                  10,
+                  teams!.length,
                   (index) {
+                    final team = teams![index];
                     return Column(
                       children: [
                         InkWell(
@@ -80,11 +116,11 @@ class Teams extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const TeamDetails(),
+                                builder: (context) => TeamDetails(team : team),
                               ),
                             );
                           },
-                          child: Ink(child: TeamCard(team: true)),
+                          child: Ink(child: TeamCard(team: true, teamData : team)),
                         ),
                         SizedBox(height: width(15)),
                       ],

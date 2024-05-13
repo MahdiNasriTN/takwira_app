@@ -12,7 +12,8 @@ final sentProvider = StateNotifierProvider<Sent, bool>(((ref) {
 }));
 
 class TeamDetails extends ConsumerWidget {
-  const TeamDetails({super.key});
+  final dynamic? team;
+  const TeamDetails({super.key, required this.team});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +22,7 @@ class TeamDetails extends ConsumerWidget {
     final sent = ref.watch(sentProvider);
     bool member = false;
     bool owner = false;
+
 
     double a = 0;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -103,7 +105,7 @@ class TeamDetails extends ConsumerWidget {
                     SizedBox(height: width(52)),
                     Center(
                       child: Text(
-                        teamData.teamName,
+                        team['team']['teamName'],
                         style: TextStyle(
                           color: const Color(0xFFF1EED0),
                           fontSize: width(20),
@@ -115,7 +117,7 @@ class TeamDetails extends ConsumerWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: width(88)),
                       child: Text(
-                        teamData.teamDescription,
+                        "We're looking for ${7 - team['team']['teamLength']} more players to join our team",
                         style: TextStyle(
                           color: const Color(0xffF1EED0),
                           fontWeight: FontWeight.normal,
@@ -143,8 +145,8 @@ class TeamDetails extends ConsumerWidget {
                                     height: width(40),
                                     child: Padding(
                                       padding: EdgeInsets.all(width(7)),
-                                      child: Image.asset(
-                                        'assets/images/avatar.png',
+                                      child: Image.network(
+                                        team['team']['teamOwner']['image'],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -191,7 +193,7 @@ class TeamDetails extends ConsumerWidget {
                                             ),
                                           ),
                                           SizedBox(width: width(5)),
-                                          Image.asset(
+                                          Image.network(
                                             'assets/images/leader.png',
                                             width: width(14),
                                             height: width(14),
@@ -201,7 +203,7 @@ class TeamDetails extends ConsumerWidget {
                                     ],
                                   ),
                                   Text(
-                                    teamData.teamLeader,
+                                    team['team']['teamOwner']['username'],
                                     style: TextStyle(
                                       color: const Color(0xFFF1EED0),
                                       fontSize: width(10),
@@ -272,7 +274,7 @@ class TeamDetails extends ConsumerWidget {
                         maxSteps: teamData.playersNeeded,
                         progressType: LinearProgressBar
                             .progressTypeLinear, // Use Linear progress
-                        currentStep: teamData.members,
+                        currentStep: team['team']['teamLength'],
                         progressColor: const Color(0xff599068),
                         backgroundColor:
                             const Color(0xffF1EED0).withOpacity(0.3),
@@ -281,7 +283,7 @@ class TeamDetails extends ConsumerWidget {
                     SizedBox(height: width(24)),
                     Center(
                       child: Text(
-                        '${teamData.playersNeeded - teamData.members} positions left of ${teamData.playersNeeded}',
+                        '${teamData.playersNeeded - team['team']['teamLength']} positions left of ${teamData.playersNeeded}',
                         style: TextStyle(
                           color: const Color(0xFFBFBCA0),
                           fontWeight: FontWeight.normal,
@@ -381,8 +383,13 @@ class TeamDetails extends ConsumerWidget {
                 children: [
                   Row(
                     children: List.generate(
-                      teamData.members,
+                      team['team']['joinedPlayers'].length,
                       (index) {
+                        final playerData = team['team']['joinedPlayers'][index];
+                        final player = {
+                          'username' : playerData['username'],
+                          'image' : playerData['image']
+                        };
                         return Row(
                           children: [
                             SizedBox(width: width(7)),
@@ -394,17 +401,17 @@ class TeamDetails extends ConsumerWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const PlayerProfile(playerData: null),
+                                            PlayerProfile(playerData: player),
                                       ),
                                     );
                                   },
                                   child: Ink(
                                     child: Column(
                                       children: [
-                                        ProfileCard(gameDataS : null),
+                                        ProfileCard(gameDataS : player),
                                         SizedBox(height: width(10)),
                                         Text(
-                                          '${playerData.played} games',
+                                          '${team['team']['joinedPlayers'][index]['playedGames']} games',
                                           style: TextStyle(
                                             color: const Color(0xFFF1EED0),
                                             fontSize: width(12),
@@ -423,7 +430,7 @@ class TeamDetails extends ConsumerWidget {
                                                 ),
                                                 SizedBox(height: width(3)),
                                                 Text(
-                                                  '${playerData.rated}',
+                                                  '10',
                                                   style: TextStyle(
                                                     color:
                                                         const Color(0xFFF1EED0),
@@ -443,7 +450,7 @@ class TeamDetails extends ConsumerWidget {
                                                 ),
                                                 SizedBox(height: width(3)),
                                                 Text(
-                                                  '${playerData.motm}',
+                                                  '5',
                                                   style: TextStyle(
                                                     color:
                                                         const Color(0xFFF1EED0),

@@ -8,9 +8,10 @@ final followProvider = StateNotifierProvider<Follow, bool>(((ref) {
 }));
 
 class FieldProfileHeader extends ConsumerWidget {
+  final dynamic? field;
   final VoidCallback onBookNowPressed; // Callback function
 
-  const FieldProfileHeader({super.key, required this.onBookNowPressed});
+  const FieldProfileHeader({super.key, required this.onBookNowPressed, required this.field});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,8 +61,8 @@ class FieldProfileHeader extends ConsumerWidget {
         Positioned(
           top: width(164),
           left: width(146),
-          child: Image.asset(
-            'assets/images/fieldProfilePhoto.png',
+          child: Image.network(
+            field['image'],
             width: width(134),
             height: width(84),
           ),
@@ -84,7 +85,7 @@ class FieldProfileHeader extends ConsumerWidget {
                     ),
                     SizedBox(height: width(5)),
                     Text(
-                      'Posts',
+                      'Likes',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -97,7 +98,7 @@ class FieldProfileHeader extends ConsumerWidget {
                 Column(
                   children: [
                     Text(
-                      '${fieldData.followersCount}',
+                      '${field['upcomingGamesCount']}',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -106,7 +107,7 @@ class FieldProfileHeader extends ConsumerWidget {
                     ),
                     SizedBox(height: width(5)),
                     Text(
-                      'Followers',
+                      'Upcoming Games',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -119,7 +120,7 @@ class FieldProfileHeader extends ConsumerWidget {
                 Column(
                   children: [
                     Text(
-                      '${fieldData.followingCount}',
+                      '${field['playedGamesCount']}',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -128,7 +129,7 @@ class FieldProfileHeader extends ConsumerWidget {
                     ),
                     SizedBox(height: width(5)),
                     Text(
-                      'Following',
+                      'Played Games',
                       style: TextStyle(
                         color: const Color(0xFFF1EED0),
                         fontSize: width(12),
@@ -144,7 +145,7 @@ class FieldProfileHeader extends ConsumerWidget {
               children: [
                 SizedBox(width: width(20)),
                 Text(
-                  fieldData.bio,
+                  field['description'],
                   style: TextStyle(
                     color: const Color(0xFFF1EED0),
                     fontSize: width(10),

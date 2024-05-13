@@ -16,7 +16,6 @@ class FieldCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fieldData = ref.watch(fieldDataProvider);
     final loved = ref.watch(loveProvider);
-    print(field['field']);
     double a = 0;
     double screenWidth = MediaQuery.of(context).size.width;
     double width(double width) {
@@ -218,7 +217,7 @@ class FieldCard extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const FieldProfile(),
+                  builder: (context) => FieldProfile(field : null),
                 ),
               );
             },

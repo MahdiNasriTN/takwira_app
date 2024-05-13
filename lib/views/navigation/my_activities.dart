@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:takwira_app/providers/activities_tabbar.dart';
 import 'package:takwira_app/views/create/create_game.dart';
 import 'package:takwira_app/views/create/create_team.dart';
@@ -10,9 +13,51 @@ import 'package:takwira_app/views/myActivities/my_liked_quickies.dart';
 import 'package:takwira_app/views/navigation/fields.dart';
 import 'package:takwira_app/views/navigation/navigation.dart';
 import 'package:takwira_app/views/profile/profile.dart';
+import 'package:http/http.dart' as http;
 
-class MyActivities extends StatelessWidget {
+class MyActivities extends StatefulWidget {
   const MyActivities({super.key});
+  @override
+    State<MyActivities> createState() => _MyActivitiesState();
+}
+
+class _MyActivitiesState extends State<MyActivities>{
+  List<dynamic>? playedGames;
+  List<dynamic>? upcomingGames;
+  List<dynamic>? teams;
+  List<dynamic>? opponentTeams;
+  List<dynamic>? joinableTeams;
+  @override
+  void initState() {
+    super.initState();
+    fetchActivitiesData();
+  }
+
+  Future<void> fetchActivitiesData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var username = prefs.getString('username') ?? '';
+    if (username.isNotEmpty) {
+      try {
+        final response = await http.get(Uri.parse('https://takwira.me/api/activities?username=$username'));
+        if (response.statusCode == 200) {
+          final fieldsResponse = jsonDecode(response.body);
+          setState(() {
+            // fields = fieldsResponse['fields'];
+            upcomingGames = fieldsResponse['upcomingGames'];
+            playedGames = fieldsResponse['playedGames'];
+            teams = fieldsResponse['teams'];
+            opponentTeams = fieldsResponse['opponentTeams'];
+            joinableTeams = fieldsResponse['joinableTeams'];
+
+          });
+        } else {
+          print('Failed to fetch user data: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Failed to fetch user data: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,9 +258,9 @@ class MyActivities extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  MyGames(),
+                  MyGames(upcomingGames : upcomingGames, playedGames : playedGames),
                   MyFields(),
-                  MyTeams(),
+                  MyTeams(teams : teams, opponentTeams : opponentTeams , joinableTeams : joinableTeams),
                   MyLikedQuickies(),
                 ],
               ),

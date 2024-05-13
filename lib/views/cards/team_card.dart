@@ -6,11 +6,12 @@ import 'package:takwira_app/views/teams/team_details.dart';
 
 class TeamCard extends ConsumerWidget {
   final bool team;
-  const TeamCard({required this.team, super.key});
+  final dynamic? teamData;
+  const TeamCard({required this.team, super.key, required this.teamData});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final teamData = ref.watch(teamDataProvider);
+    final teamDatas = ref.watch(teamDataProvider);
     bool member = false;
 
     double a = 0;
@@ -38,7 +39,7 @@ class TeamCard extends ConsumerWidget {
           top: width(39),
           left: width(159),
           child: Text(
-            teamData.teamName,
+            teamData['team']['teamName'],
             style: TextStyle(
               color: const Color(0xFFF1EED0),
               fontSize: width(12),
@@ -54,7 +55,9 @@ class TeamCard extends ConsumerWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: width(20)),
                 child: Text(
-                  teamData.teamDescription,
+                  /*YA CHAMS HETHY ZIDHA CONDITION MTA3 KEN EL TEAM['JoinedPlayerd'] == 7 donc aaml
+                  text mta3 We're looking for an opponent ... else hetha el text eli ta7tha*/ 
+                  "We're looking for ${7 - teamData['team']['teamLength']} more players to join our team",
                   style: TextStyle(
                     color: const Color(0xffF1EED0),
                     fontWeight: FontWeight.normal,
@@ -107,14 +110,14 @@ class TeamCard extends ConsumerWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const TeamDetails(),
+                            builder: (context) => TeamDetails(team : teamData),
                           ),
                         );
                       },
                       child: Text(
                         member == true
                             ? 'Details'
-                            : teamData.playersNeeded != teamData.members
+                            : teamDatas.playersNeeded != teamDatas.members
                                 ? 'Join'
                                 : 'Contact',
                         style: TextStyle(
@@ -136,16 +139,16 @@ class TeamCard extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           LinearProgressBar(
-                            maxSteps: teamData.playersNeeded,
+                            maxSteps: teamDatas.playersNeeded,
                             progressType: LinearProgressBar.progressTypeLinear,
-                            currentStep: teamData.members,
+                            currentStep: teamData['team']['teamLength'],
                             progressColor: const Color(0xff599068),
                             backgroundColor:
                                 const Color(0xffF1EED0).withOpacity(0.3),
                           ),
                           SizedBox(height: width(4)),
                           Text(
-                            '${teamData.members}',
+                            '${teamData['team']['teamLength']}',
                             style: TextStyle(
                               color: const Color(0xFFF1EED0),
                               fontWeight: FontWeight.normal,
@@ -165,7 +168,7 @@ class TeamCard extends ConsumerWidget {
                         ),
                         SizedBox(height: width(4)),
                         Text(
-                          '${teamData.playersNeeded}',
+                          '${teamDatas.playersNeeded}',
                           style: TextStyle(
                             color: const Color(0xFFF1EED0),
                             fontWeight: FontWeight.normal,

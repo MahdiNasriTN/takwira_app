@@ -5,7 +5,10 @@ import 'package:takwira_app/views/teams/team_details.dart';
 import 'package:takwira_app/views/teams/teams.dart';
 
 class MyTeams extends StatelessWidget {
-  const MyTeams({super.key});
+  final dynamic? teams;
+  final dynamic? joinableTeams;
+  final dynamic? opponentTeams;
+  const MyTeams({super.key, required this.teams, required this.opponentTeams, required this.joinableTeams});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +25,9 @@ class MyTeams extends StatelessWidget {
           SizedBox(height: 20),
           Column(
             children: List.generate(
-              2,
+              teams.length,
               (index) {
+                final team = teams[index];
                 return Column(
                   children: [
                     InkWell(
@@ -31,11 +35,11 @@ class MyTeams extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const TeamDetails(),
+                            builder: (context) => TeamDetails(team : team),
                           ),
                         );
                       },
-                      child: Ink(child: TeamCard(team: true)),
+                      child: Ink(child: TeamCard(team: true, teamData: team)),
                     ),
                     SizedBox(height: width(15)),
                   ],
@@ -106,8 +110,9 @@ class MyTeams extends StatelessWidget {
                 const SizedBox(width: 10),
                 Row(
                   children: List.generate(
-                    5,
+                    opponentTeams.length,
                     (index) {
+                      final team = opponentTeams[index];
                       return Row(
                         children: [
                           InkWell(
@@ -115,11 +120,11 @@ class MyTeams extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const TeamDetails(),
+                                  builder: (context) => TeamDetails(team : team),
                                 ),
                               );
                             },
-                            child: Ink(child: TeamCard(team: false)),
+                            child: Ink(child: TeamCard(team: false, teamData: team)),
                           ),
                           SizedBox(width: width(11)),
                         ],
@@ -175,8 +180,9 @@ class MyTeams extends StatelessWidget {
                 const SizedBox(width: 10),
                 Row(
                   children: List.generate(
-                    5,
+                    joinableTeams.length,
                     (index) {
+                      final team = joinableTeams[index];
                       return Row(
                         children: [
                           InkWell(
@@ -184,11 +190,11 @@ class MyTeams extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const TeamDetails(),
+                                  builder: (context) => TeamDetails(team : team),
                                 ),
                               );
                             },
-                            child: Ink(child: TeamCard(team: false)),
+                            child: Ink(child: TeamCard(team: false, teamData: team)),
                           ),
                           SizedBox(width: width(11)),
                         ],

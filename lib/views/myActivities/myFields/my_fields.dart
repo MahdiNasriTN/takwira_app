@@ -32,7 +32,7 @@ class MyFields extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const FieldProfile(),
+                              builder: (context) => FieldProfile(field : null),
                             ),
                           );
                         },
@@ -122,7 +122,7 @@ class MyFields extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const FieldProfile(),
+                                  builder: (context) => FieldProfile(field : null),
                                 ),
                               );
                             },

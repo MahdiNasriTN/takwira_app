@@ -69,11 +69,11 @@ class AllMyTeams extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const TeamDetails(),
+                                builder: (context) => const TeamDetails(team : null),
                               ),
                             );
                           },
-                          child: Ink(child: TeamCard(team: true)),
+                          child: Ink(child: TeamCard(team: true, teamData: null)),
                         ),
                         SizedBox(height: width(15)),
                       ],

@@ -112,7 +112,6 @@ class _GamesState extends State<Games>{
                   games!.length,
                   (index) {
                     final game = games?[index];
-                    print(game);
                     return Column(
                       children: [
                         InkWell(

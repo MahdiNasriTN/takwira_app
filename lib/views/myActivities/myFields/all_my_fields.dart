@@ -49,7 +49,7 @@ class AllMyFields extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const FieldProfile(),
+                                builder: (context) => FieldProfile(field : null),
                               ),
                             );
                           },
